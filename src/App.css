@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'Andale Mono';
+  font-weight: 400;
+  src: local('andale-mono'), url(./fonts/andale-mono.ttf) format('truetype');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Andale Mono';
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased !important;
+  background-color: #000;
+}
+
+pre {
+  font-family: 'Andale Mono';
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+body html #root {
+  height: 100%;
+}
