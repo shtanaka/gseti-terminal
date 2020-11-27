@@ -8,8 +8,8 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          {routes.map(route => (
-            <Route path={route.path}>
+          {routes.map((route) => (
+            <Route path={route.path} key={`route-${route.path}`}>
               <route.component />
             </Route>
           ))}

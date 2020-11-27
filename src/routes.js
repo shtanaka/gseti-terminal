@@ -1,8 +1,10 @@
 import { Home } from "pages/Home" 
 
-export default [
+const routes = [
   {
     path: "/",
     component: Home
   }
-]
+];
+
+export default routes;

@@ -1,0 +1,1 @@
+export { default as TerminalTextArea } from "./TerminalTextArea";

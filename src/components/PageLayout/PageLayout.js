@@ -1,10 +1,12 @@
 import React from "react"
 import PageLayoutStyled from "./PageLayout.styled"
 
-export default ({ children }) => {
+const PageLayout = ({ children }) => {
   return (
     <PageLayoutStyled>
       {children}
     </PageLayoutStyled>
   )
 }
+
+export default PageLayout;
