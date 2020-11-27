@@ -1,7 +1,6 @@
 export const mockLines = [
   { status: "success", type: "input", value: "help" },
   { status: "success", type: "output", value: "\n" },
-  { status: "success", type: "output", value: "\n" },
   { status: "success", type: "output", value: "Usage: [command]" },
   { status: "success", type: "output", value: "List of commands:" },
   { status: "success", type: "output", value: "companies                See all companies Gustavo has worked" },

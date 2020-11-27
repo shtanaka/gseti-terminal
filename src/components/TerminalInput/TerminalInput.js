@@ -37,13 +37,20 @@ const TerminalInput = () => {
 
   useDebouncedInterval(() => {
     const blinkChar = caretPosition === inputValue.length ? " " : inputValue[caretPosition];
-    setCursorValue(prev => prev === cursorChar ? blinkChar : cursorChar);
+    setCursorValue(cursorValue === cursorChar ? blinkChar : cursorChar);
   }, blinkCursorSpeedInMs, caretPosition);
 
   const handleTerminalInputKeyDown = ({ key, target }) => {
-
     if (key === 'Enter') {
       console.log('Call command!');
+    }
+    if (key === 'ArrowLeft') {
+      setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition);
+      setCursorValue(cursorChar);
+    }
+    if (key === 'ArrowRight') {
+      setCaretPosition(caretPosition < inputValue.length ? caretPosition + 1 : caretPosition);
+      setCursorValue(cursorChar);
     }
   };
 

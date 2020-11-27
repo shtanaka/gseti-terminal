@@ -6,11 +6,7 @@ import { TerminalInput } from "components/TerminalInput";
 
 import HomeStyled from "./Home.styled";
 
-
-
-
 const Home = () => {
-
   return (
     <HomeStyled>
       <TerminalTextArea lines={mockLines} />
