@@ -7,7 +7,7 @@ const runCommand = async (cmd) => {
     case 'clear':
       return await commands.clearTerminal()
     default:
-      return { status: "error", type: "output", value: '' }
+      return { status: "error", type: "output", value: `Command ${cmd} not found.` }
   }
 }
 
