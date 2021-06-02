@@ -6,6 +6,8 @@ const runCommand = async (cmd) => {
       return await commands.printHelp()
     case 'clear':
       return await commands.clearTerminal()
+    case 'companies':
+      return await commands.printCompanies()
     default:
       return { status: "error", type: "output", value: `Command ${cmd} not found.` }
   }

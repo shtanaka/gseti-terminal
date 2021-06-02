@@ -20,14 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Show Secrets
-        run:
-          echo 'S3_BUCKET - ${{ secrets.S3_BUCKET }} \n'
-          echo 'S3_BUCKET_REGION - ${{ secrets.S3_BUCKET_REGION }} \n'
-          echo 'AWS_ACCESS_KEY_ID - ${{ secrets.AWS_ACCESS_KEY_ID }} \n'
-          echo 'AWS_SECRET_ACCESS_KEY - ${{ secrets.AWS_SECRET_ACCESS_KEY }} \n'
-          echo 'GITHUB_TOKEN - ${{ secrets.GITHUB_TOKEN }} \n'
       
       - name: Install dependencies
         run: yarn
