@@ -1,6 +1,6 @@
 import store from "store"
 
-export const clearTerminal = async () => {
+export const clear = async () => {
   store.dispatch({ type: 'terminalOutput/clearLines' })
   return { status: "error", type: "output", value: '' }
 }

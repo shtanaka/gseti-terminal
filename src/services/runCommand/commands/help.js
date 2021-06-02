@@ -8,4 +8,4 @@ export const helpLines = [
   { status: "success", type: "output", value: "\n" },
 ]
 
-export const printHelp = async () => helpLines
+export const help = async () => helpLines

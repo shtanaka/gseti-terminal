@@ -1,15 +1,13 @@
 import * as commands from './commands'
 
 const runCommand = async (cmd) => {
-  switch (cmd) {
-    case 'help':
-      return await commands.printHelp()
-    case 'clear':
-      return await commands.clearTerminal()
-    case 'companies':
-      return await commands.printCompanies()
-    default:
-      return { status: "error", type: "output", value: `Command ${cmd} not found.` }
+  const command = cmd.split(' ')[0]
+  const callback = commands[command]
+
+  try {
+    return await callback(cmd)
+  } catch(e) {
+    return { status: "error", type: "output", value: `Command ${cmd} not found or with invalid parameters.` }
   }
 }
 
