@@ -1,3 +1,5 @@
+import runCommand from "services/runCommand"
+
 export const terminal = {
   state: {
     isTerminalInputActive: true,
@@ -14,9 +16,16 @@ export const terminal = {
       this.setIsTerminalInputActive(false)
       
       await dispatch.terminalOutput.insertLine({ status: "success", type: "input", value: commandLine })
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('command called: ', commandLine)
       
+      const commandOutput = await runCommand(commandLine)
+      if (commandOutput) {
+        if (Array.isArray(commandOutput)){
+          await dispatch.terminalOutput.insertLines(commandOutput)
+        } else {
+          await dispatch.terminalOutput.insertLine(commandOutput)
+        }
+      }
+
       this.setIsTerminalInputActive(true)
     },
   }),

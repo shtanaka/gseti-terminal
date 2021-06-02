@@ -9,5 +9,8 @@ export const terminalOutput = {
     insertLines(state, payload) {
       return [...state, ...payload]
     },
+    clearLines(state, _payload) {
+      return []
+    }
   },
 }
