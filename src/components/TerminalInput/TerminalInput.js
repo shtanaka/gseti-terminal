@@ -1,17 +1,17 @@
-import React from "react";
-import FocusLock from 'react-focus-lock';
+import React from "react"
+import { connect } from 'react-redux'
+import FocusLock from 'react-focus-lock'
 
-import { replaceAt } from "utils/stringUtils";
-import useDebouncedInterval from "hooks/useDebouncedInterval";
+import { replaceAt } from "utils/stringUtils"
+import useDebouncedInterval from "hooks/useDebouncedInterval"
 
-import TerminalInputStyled from "./TerminalInput.styled";
-
+import TerminalInputStyled from "./TerminalInput.styled"
 
 const cursorChar = '█';
 const inputPrefixChar = '➙';
 const blinkCursorSpeedInMs = 500;
 
-const TerminalInput = () => {
+const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
   const terminalInputRef = React.useRef(null);
   const [inputValue, setInputValue] = React.useState('help');
   const [cursorValue, setCursorValue] = React.useState(cursorChar);
@@ -22,27 +22,39 @@ const TerminalInput = () => {
     const handleGlobalClick = () => {
       terminalInputRef.current.focus();
     };
-
     document.body.addEventListener('click', handleGlobalClick);
+
     return () => {
       document.body.removeEventListener('click', handleGlobalClick);
     }
   }, []);
 
   React.useEffect(() => {
-    const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
-    const displayValue = `${inputPrefixChar} ${displayText}`
-    setDisplayValue(displayValue);
-  }, [inputValue, caretPosition, cursorValue]);
+    if (isTerminalInputActive) {
+      const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
+      const displayValue = `${inputPrefixChar} ${displayText}`
+      setDisplayValue(displayValue);
+    } else {
+      const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
+      setDisplayValue(displayText);
+    }
+
+  }, [inputValue, caretPosition, cursorValue, isTerminalInputActive]);
 
   useDebouncedInterval(() => {
     const blinkChar = caretPosition === inputValue.length ? " " : inputValue[caretPosition];
     setCursorValue(cursorValue === cursorChar ? blinkChar : cursorChar);
   }, blinkCursorSpeedInMs, caretPosition);
 
-  const handleTerminalInputKeyDown = ({ key, target }) => {
+
+  const handleTerminalInputChange = ({ target }) => {
+    setInputValue(target.value);
+  };
+
+  const handleTerminalInputKeyDown = ({ key }) => {
     if (key === 'Enter') {
-      console.log('Call command!');
+      setInputValue('')
+      callCommand(inputValue)
     }
     if (key === 'ArrowLeft') {
       setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition);
@@ -57,10 +69,6 @@ const TerminalInput = () => {
   const handleTerminalInputKeyUp = ({ target }) => {
     setCaretPosition(target.selectionStart);
     setCursorValue(cursorChar);
-  };
-
-  const handleTerminalInputChange = ({ target }) => {
-    setInputValue(target.value);
   };
 
   return (
@@ -81,4 +89,14 @@ const TerminalInput = () => {
   );
 }
 
-export default TerminalInput;
+const mapState = ({ terminal }) => ({
+  isTerminalInputActive: terminal.isTerminalInputActive,
+})
+
+const mapDispatch = ({ terminal }) => ({
+  callCommand: terminal.callCommand,
+})
+
+const ConnectedTerminalInput = connect(mapState, mapDispatch)(TerminalInput)
+
+export default ConnectedTerminalInput;

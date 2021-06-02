@@ -1,14 +1,24 @@
 import React from "react";
 
-import TerminalTextAreaStyled from "./TerminalTextArea.styled";
-import { TerminalTextAreaLine } from "./components/TerminalTextAreaLine";
+import { connect } from 'react-redux'
 
-const TerminalTextArea = ({ lines }) => (
-  <TerminalTextAreaStyled>
-    {lines.map((line, index) => (
-      <TerminalTextAreaLine line={line} key={`commandLine-${index}`} />
-    ))}
-  </TerminalTextAreaStyled>
-);
+import TerminalTextAreaStyled from "./TerminalTextArea.styled"
+import { TerminalTextAreaLine } from "./components/TerminalTextAreaLine"
 
-export default TerminalTextArea;
+const TerminalTextArea = ({ terminalOutput }) => {
+  return (
+    <TerminalTextAreaStyled>
+      {terminalOutput.map((line, index) => (
+        <TerminalTextAreaLine line={line} key={`commandLine-${index}`} />
+      ))}
+    </TerminalTextAreaStyled>
+  );
+}
+
+const mapState = ({ terminalOutput }) => ({ terminalOutput })
+
+const mapDispatch = () => ({})
+
+const ConnectedTerminalTextArea = connect(mapState, mapDispatch)(TerminalTextArea)
+
+export default ConnectedTerminalTextArea
