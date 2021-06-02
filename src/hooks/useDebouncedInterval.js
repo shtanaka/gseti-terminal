@@ -7,7 +7,7 @@ const useDebouncedInterval = (callback, delay, value) => {
   useEffect(() => {
     window.clearInterval(intervalRef.current);
     intervalRef.current = window.setInterval(() => callbackRef.current(), delay);
-  }, [value]);
+  }, [intervalRef, callbackRef, value, delay]);
 }
 
 export default useDebouncedInterval;

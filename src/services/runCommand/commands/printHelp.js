@@ -1,5 +1,3 @@
-import store from "store"
-
 export const helpLines = [
   { status: "success", type: "output", value: "\n" },
   { status: "success", type: "output", value: "Usage: [command]" },

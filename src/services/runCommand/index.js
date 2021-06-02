@@ -1,6 +1,6 @@
 import * as commands from './commands'
 
-export default async (cmd) => {
+const runCommand = async (cmd) => {
   switch (cmd) {
     case 'help':
       return await commands.printHelp()
@@ -10,3 +10,5 @@ export default async (cmd) => {
       return { status: "error", type: "output", value: '' }
   }
 }
+
+export default runCommand
