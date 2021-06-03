@@ -12,7 +12,10 @@ export const terminalOutput = {
       const inputLines = state.lines.filter((item) => item.type === 'input')
       
       if (val === -1) {
-        return { ...state, autocompleteInversedIndex: 0, currentAutoCompleteLine: inputLines[inputLines.length - 1].value };
+        if (inputLines.length) {
+          return { ...state, autocompleteInversedIndex: 0, currentAutoCompleteLine: inputLines[inputLines.length - 1].value };
+        }
+        return state;
       }
 
       const autocompleteInversedIndex = val < inputLines.length - 1 ? val + 1 : val

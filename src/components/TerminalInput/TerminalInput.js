@@ -57,31 +57,34 @@ const TerminalInput = ({
 
 
   const handleTerminalInputChange = ({ target }) => {
-    setInputValue(target.value);
+    setInputValue(target.value)
   };
 
   const handleTerminalInputKeyDown = async ({ key }) => {
-    if (key === 'Enter') {
-      setInputValue('')
-      callCommand(inputValue)
-      terminalOutputDispatch.resetAutocompleteInversedIndex();
+    const keyMapCallback = {
+      Enter: () => {
+        setInputValue('')
+        callCommand(inputValue)
+        terminalOutputDispatch.resetAutocompleteInversedIndex()
+      },
+      ArrowLeft: () => {
+        setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition)
+        setCursorValue(cursorChar)
+      },
+      ArrowRight: () => {
+        setCaretPosition(caretPosition < inputValue.length ? caretPosition + 1 : caretPosition)
+        setCursorValue(cursorChar)
+      },
+      ArrowUp: () => {
+        terminalOutputDispatch.incrementAutocompleteInversedIndex()
+      },
+      ArrowDown: () => {
+        terminalOutputDispatch.decrementAutocompleteInversedIndex()
+      }
     }
-    if (key === 'ArrowLeft') {
-      setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition);
-      setCursorValue(cursorChar);
-    }
-    if (key === 'ArrowRight') {
-      setCaretPosition(caretPosition < inputValue.length ? caretPosition + 1 : caretPosition);
-      setCursorValue(cursorChar);
-    }
+    const callback = keyMapCallback[key]
+    if (callback) callback()
 
-    if (key === 'ArrowUp') {
-      terminalOutputDispatch.incrementAutocompleteInversedIndex();
-    }
-
-    if (key === 'ArrowDown') {
-      terminalOutputDispatch.decrementAutocompleteInversedIndex();
-    }
   };
 
   const handleTerminalInputKeyUp = ({ target }) => {
