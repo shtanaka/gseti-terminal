@@ -96,8 +96,6 @@ const TerminalInput = ({
     setCursorValue(cursorChar);
   };
 
-  console.log(terminalInputRef)
-
   return (
     <TerminalInputStyled>
       <pre>{displayValue}</pre>
