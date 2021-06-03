@@ -6,6 +6,7 @@ import { replaceAt } from "utils/stringUtils"
 import useDebouncedInterval from "hooks/useDebouncedInterval"
 
 import TerminalInputStyled from "./TerminalInput.styled"
+import { scrollPageToPosition } from "utils/pageUtils"
 
 const cursorChar = '█';
 const inputPrefixChar = '➙';
@@ -35,6 +36,7 @@ const TerminalInput = ({
   }, []);
 
   React.useEffect(() => {
+    scrollPageToPosition(terminalInputRef.current.offsetTop)
     if (isTerminalInputActive) {
       const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
       const displayValue = `${inputPrefixChar} ${displayText} `
@@ -68,11 +70,13 @@ const TerminalInput = ({
         terminalOutputDispatch.resetAutocompleteInversedIndex()
       },
       ArrowLeft: () => {
-        setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition)
+        const newCaretPosition = caretPosition > 0 ? caretPosition - 1 : caretPosition
+        setCaretPosition(newCaretPosition)
         setCursorValue(cursorChar)
       },
       ArrowRight: () => {
-        setCaretPosition(caretPosition < inputValue.length ? caretPosition + 1 : caretPosition)
+        const newCaretPosition = caretPosition < inputValue.length ? caretPosition + 1 : caretPosition
+        setCaretPosition(newCaretPosition)
         setCursorValue(cursorChar)
       },
       ArrowUp: () => {
@@ -92,15 +96,22 @@ const TerminalInput = ({
     setCursorValue(cursorChar);
   };
 
+  console.log(terminalInputRef)
+
   return (
     <TerminalInputStyled>
       <pre>{displayValue}</pre>
       <FocusLock>
         <input
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
           type="text"
           value={inputValue}
           ref={terminalInputRef}
           className="hidden-input"
+          onFocus={() => scrollPageToPosition(terminalInputRef.current.offsetTop)}
           onKeyDown={handleTerminalInputKeyDown}
           onKeyUp={handleTerminalInputKeyUp}
           onChange={handleTerminalInputChange}
