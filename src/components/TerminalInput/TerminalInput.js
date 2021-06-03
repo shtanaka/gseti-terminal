@@ -11,9 +11,14 @@ const cursorChar = '█';
 const inputPrefixChar = '➙';
 const blinkCursorSpeedInMs = 500;
 
-const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
+const TerminalInput = ({
+  callCommand,
+  currentAutoCompleteLine,
+  terminalOutputDispatch,
+  isTerminalInputActive,
+}) => {
   const terminalInputRef = React.useRef(null);
-  const [inputValue, setInputValue] = React.useState('help');
+  const [inputValue, setInputValue] = React.useState('');
   const [cursorValue, setCursorValue] = React.useState(cursorChar);
   const [displayValue, setDisplayValue] = React.useState(inputPrefixChar);
   const [caretPosition, setCaretPosition] = React.useState('help'.length);
@@ -32,7 +37,7 @@ const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
   React.useEffect(() => {
     if (isTerminalInputActive) {
       const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
-      const displayValue = `${inputPrefixChar} ${displayText}`
+      const displayValue = `${inputPrefixChar} ${displayText} `
       setDisplayValue(displayValue);
     } else {
       const displayText = replaceAt(`${inputValue} `, caretPosition, cursorValue);
@@ -40,6 +45,10 @@ const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
     }
 
   }, [inputValue, caretPosition, cursorValue, isTerminalInputActive]);
+
+  React.useEffect(() => {
+    setInputValue(currentAutoCompleteLine);
+  }, [currentAutoCompleteLine])
 
   useDebouncedInterval(() => {
     const blinkChar = caretPosition === inputValue.length ? " " : inputValue[caretPosition];
@@ -51,10 +60,11 @@ const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
     setInputValue(target.value);
   };
 
-  const handleTerminalInputKeyDown = ({ key }) => {
+  const handleTerminalInputKeyDown = async ({ key }) => {
     if (key === 'Enter') {
       setInputValue('')
       callCommand(inputValue)
+      terminalOutputDispatch.resetAutocompleteInversedIndex();
     }
     if (key === 'ArrowLeft') {
       setCaretPosition(caretPosition > 0 ? caretPosition - 1 : caretPosition);
@@ -63,6 +73,14 @@ const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
     if (key === 'ArrowRight') {
       setCaretPosition(caretPosition < inputValue.length ? caretPosition + 1 : caretPosition);
       setCursorValue(cursorChar);
+    }
+
+    if (key === 'ArrowUp') {
+      terminalOutputDispatch.incrementAutocompleteInversedIndex();
+    }
+
+    if (key === 'ArrowDown') {
+      terminalOutputDispatch.decrementAutocompleteInversedIndex();
     }
   };
 
@@ -89,11 +107,13 @@ const TerminalInput = ({ callCommand, isTerminalInputActive }) => {
   );
 }
 
-const mapState = ({ terminal }) => ({
+const mapState = ({ terminal, terminalOutput }) => ({
+  currentAutoCompleteLine: terminalOutput.currentAutoCompleteLine,
   isTerminalInputActive: terminal.isTerminalInputActive,
 })
 
-const mapDispatch = ({ terminal }) => ({
+const mapDispatch = ({ terminal, terminalOutput }) => ({
+  terminalOutputDispatch: terminalOutput,
   callCommand: terminal.callCommand,
 })
 

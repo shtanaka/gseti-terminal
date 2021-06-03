@@ -8,7 +8,7 @@ import { TerminalTextAreaLine } from "./components/TerminalTextAreaLine"
 const TerminalTextArea = ({ terminalOutput }) => {
   return (
     <TerminalTextAreaStyled>
-      {terminalOutput.map((line, index) => (
+      {terminalOutput.lines.map((line, index) => (
         <TerminalTextAreaLine line={line} key={`commandLine-${index}`} />
       ))}
     </TerminalTextAreaStyled>
